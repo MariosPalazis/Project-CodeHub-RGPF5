@@ -1,15 +1,21 @@
 import './App.css';
 import React from "react";
 import { Switch, Route, Link } from 'react-router-dom';
-import {HomeP, CoursesP, AddNewP } from './Pages/Nav'
+import Home from './Pages/Home';
+import Courses from './Pages/Courses';
+import AddNew from './Pages/AddNew';
+import NoMatch from './Pages/NoMatch';
+import SingleCourse from './Pages/SingleCourse';
 
 
 const Main = () => (
   <main>
     <Switch>
-      <Route exact path='/' component={HomeP} />
-      <Route exact path='/1' component={CoursesP}/>
-      <Route exact path='/2' component={AddNewP} />
+      <Route exact path='/' component={Home} />
+      <Route exact path='/Courses' component={Courses}/>
+      <Route exact path='/AddNew' component={AddNew} />
+      <Route exact path="/Courses/:id" component={SingleCourse} />
+      <Route component={NoMatch} />
     </Switch>
   </main>
 )
@@ -20,11 +26,11 @@ const Header = () => (
       <li className="nav-item">
         <Link className="navbar-brand" style={{color: "white"}} to="/">Code.Hub DashBoard</Link>
       </li>
-      <li className="nav-item" style={{marginLeft:"800px"}} >
-        <Link className="navbar-brand" style={{color:"LightGray"}} to="/1">Courses</Link>
+      <li className="nav-item" style={{"marginLeft":"60vw"}} >
+        <Link className="navbar-brand" style={{color:"LightGray"}} to="/Courses">Courses</Link>
       </li>
       <li className="nav-item">
-        <Link className="navbar-brand" style={{ color:"LightGray"}} to="/2">Add New Course</Link>
+        <Link className="navbar-brand" style={{ color:"LightGray"}} to="/AddNew">Add New Course</Link>
       </li>
     </ul>
     </nav>

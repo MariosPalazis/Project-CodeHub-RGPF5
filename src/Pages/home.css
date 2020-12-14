@@ -1,0 +1,23 @@
+.Main{
+    background-color:lightgray;
+    color:black;
+    width: 100vw;
+    height: 30vh;
+    margin-top: 5vh;
+    padding: 60px 0;
+}
+.content{
+    margin-left: 5%;
+}
+.stat{
+    width: 20vw;
+    height: 10vh;
+    border: 1.5px solid rgb(180, 180, 180);
+    padding: 20px 0;
+}
+h6{
+    margin-left: 3%;
+}
+.labelT{
+    font-size: 20px;
+}

@@ -2,11 +2,12 @@ import React, {useEffect, useState} from "react";
 import {Button,Modal,Form} from "react-bootstrap";
 import AddNewInstructors from "../Components/AddNewInstructors";
 import axios from 'axios';
-
+import {Redirect} from 'react-router-dom';
 
 export const AddNew = () => {
     const [validatedA, setValidatedA] = useState(false);
     const [instr, setInstr] = useState([]);
+    const [error,setError]=useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -20,7 +21,7 @@ export const AddNew = () => {
     }, []);
 
     const [data,setData]=useState({
-        "id": "",
+        "id": "05",
         "title": "",
         "imagePath": "",
         "price": {
@@ -48,9 +49,19 @@ export const AddNew = () => {
         }
         else{
             event.preventDefault();
-            console.log(data);
-
-        }
+            console.log("mpike");
+            const postData = async () => {
+                let cb=await axios.post(
+                  'http://localhost:3000/courses/',data
+                );
+                console.log(cb);
+                setTimeout(() => {
+                    setError(false);
+                  }, 2000);
+                  
+              };
+              postData();
+            }
     
         setValidatedA(true);
       };
@@ -58,6 +69,9 @@ export const AddNew = () => {
         setData({...data, [event.target.name]:event.target.value});
     };
 
+    if(!error){
+        return <Redirect to="/Courses" />
+    }
 
     return(
         <div style={{padding:"30px", margin:"10px", backgroundColor:"Gainsboro"}}>
@@ -121,9 +135,9 @@ export const AddNew = () => {
                     <Form.Group >
                         <Form.Label><h3>Price:</h3></Form.Label><br/>
                         <Form.Label>Normal price:</Form.Label>
-                        <Form.Control required type="text" defaultValue={data.price && data.price.normal} name="price.normal" onChange={e=>setData({...data,price:{...data.price,normal:e.target.value}})}/>
+                        <Form.Control required type="text" defaultValue={data.price && data.price.normal} name="price.normal" onChange={e=>setData({...data,price:{...data.price,normal:parseInt(e.target.value)}})}/>
                         <Form.Label>Early bid:</Form.Label>
-                        <Form.Control required type="text" defaultValue={data.price && data.price.early_bird} name="price.early_bird" onChange={e=>setData({...data,price:{...data.price,early_bird:e.target.value}})}/>
+                        <Form.Control required type="text" defaultValue={data.price && data.price.early_bird} name="price.early_bird" onChange={e=>setData({...data,price:{...data.price,early_bird:parseInt(e.target.value)}})}/>
                         <Form.Control.Feedback type="invalid">
                             Please put a value.
                         </Form.Control.Feedback>

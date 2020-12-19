@@ -21,7 +21,7 @@ export const AddNew = () => {
     }, []);
 
     const [data,setData]=useState({
-        "id": "05",
+        "id": "",
         "title": "",
         "imagePath": "",
         "price": {
@@ -38,7 +38,9 @@ export const AddNew = () => {
         "description": ""
       });
 
-
+      const isInst=(id)=>{
+        return data.instructors.includes(id);
+    };
 
     const handleSubmitAdd = (event) => {
         const form = event.currentTarget;
@@ -67,6 +69,20 @@ export const AddNew = () => {
       };
     const updateData=(event)=>{
         setData({...data, [event.target.name]:event.target.value});
+    };
+    const updateInstuctors=(event)=>{
+        let temp=data.instructors;
+        if(isInst(event.target.name)){
+            let index=temp.indexOf(event.target.name);
+            if (index > -1) {
+                temp.splice(index, 1);
+            }
+            setData({...data, instructors:temp});
+        }
+        else{
+            temp.push(event.target.name);
+            setData({...data, instructors:temp});
+        }
     };
 
     if(!error){
@@ -109,7 +125,7 @@ export const AddNew = () => {
                     <Form.Group >
                         <h3><Form.Label>Instructors</Form.Label></h3>
                         {instr?.map((inst)=>(
-                            <AddNewInstructors id={inst.id}/>
+                            <Form.Check  type="checkbox" name={inst.id} checked={isInst(inst.id)} label={inst.name && inst.name.first+" "+inst.name.last} onChange={updateInstuctors}/>
                         ))}
                         <Form.Control.Feedback type="invalid">
                             Please pick a value.

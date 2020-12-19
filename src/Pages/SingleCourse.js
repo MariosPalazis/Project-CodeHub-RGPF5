@@ -14,10 +14,12 @@ function createMarkup(text) {
     return {__html: text};
   }
 
+
 export const SingleCourse = () => {
     let {id}=useParams();
     const [singleC, setCdata] = useState({});
     const [data,setData]=useState({});
+    const [instructors,setInstruct]=useState([]);
     const [loader, setLoad] = useState(true);
 
     const [edit, setEdit] = useState(false);
@@ -36,15 +38,22 @@ export const SingleCourse = () => {
             const result = await axios(
               'http://localhost:3000/courses/'+id,
             );
-            console.log("res")
             setCdata(result.data);
             setData(result.data);
-            setLoad(false)
+            setLoad(false);
           };
        
           fetchD();
 
-    },[]);
+          const fetchI = async () => {
+            const res = await axios(
+              'http://localhost:3000/instructors/',
+            );
+            setInstruct(res.data);
+          };
+          fetchI();
+
+    },[id]);
 
     const handleSubmitEdit = (event) => {
         const form = event.currentTarget;
@@ -55,7 +64,7 @@ export const SingleCourse = () => {
         }
         else{
             event.preventDefault();
-            console.log(data,"to send")
+            console.log(data,"to send");
             const editData = async () => {
                 let cb=await axios.put('http://localhost:3000/courses/'+id,data);
                 console.log(cb);
@@ -80,12 +89,28 @@ export const SingleCourse = () => {
         const updateData=(event)=>{
             setData({...data, [event.target.name]:event.target.value});
         };
+        const updateInstuctors=(event)=>{
+            let temp=data.instructors;
+            if(isInst(event.target.name)){
+                let index=temp.indexOf(event.target.name);
+                if (index > -1) {
+                    temp.splice(index, 1);
+                }
+                setData({...data, instructors:temp});
+            }
+            else{
+                temp.push(event.target.name);
+                setData({...data, instructors:temp});
+            }
+        };
         if(!redi){
             return <Redirect to="/Courses" />;
         }
 
         /*edwww */
-    
+        const isInst=(id)=>{
+            return data.instructors.includes(id);
+        };
 
     console.log(singleC);
     return(
@@ -107,15 +132,15 @@ export const SingleCourse = () => {
             <button class="btn btn-danger"  style={{marginLeft:"1vw"}} onClick={openDel}>Delete</button>
             <br/>
             <h4 style={{marginLeft:"1vw"}}>Instructors</h4>
-            {singleC.instructors?.map((ins)=>(
-                <Instructors id={ins}/>
+            {singleC.instructors?.map((instt)=>(
+                <Instructors id={instt}/>
             ))}
             <br/>
             <br/>
             <div>
             <Modal show={edit} onHide={closeEdit} size="lg" backdrop="static" keyboard={false}>
                 <Modal.Header closeButton>
-                <Modal.Title>Edit {data.title}</Modal.Title>
+                <Modal.Title>Edit {singleC.title}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                 <Form noValidate validated={validatedE} onSubmit={handleSubmitEdit}>
@@ -149,7 +174,9 @@ export const SingleCourse = () => {
                     </Form.Group>
                     <Form.Group >
                         <h3><Form.Label>Instructors</Form.Label></h3>
-                            <FormInstructor id={data.id}/>
+                        {instructors.map((ins)=>(
+                            <Form.Check  type="checkbox" name={ins.id} checked={isInst(ins.id)} label={ins.name && ins.name.first+" "+ins.name.last} onChange={updateInstuctors}/>
+                        ))}
                         <Form.Control.Feedback type="invalid">
                             Please pick a value.
                         </Form.Control.Feedback>

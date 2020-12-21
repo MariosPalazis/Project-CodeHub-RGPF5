@@ -3,11 +3,9 @@ import React, { useEffect, useState } from "react";
 import Loader from 'react-loader-spinner';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useParams } from "react-router-dom";
-import Buttons from "./Buttons";
 import Instructors from "./Instructors";
 import './singlecourse.css';
 import {Button,Modal,Form} from "react-bootstrap";
-import FormInstructor from "../Components/FormInstructor";
 import {Redirect} from 'react-router-dom';
 
 function createMarkup(text) {

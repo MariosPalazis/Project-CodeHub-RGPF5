@@ -1,13 +1,17 @@
 import React, {useEffect, useState} from "react";
-import {Button,Modal,Form} from "react-bootstrap";
+import {Button,Form} from "react-bootstrap";
 import AddNewInstructors from "../Components/AddNewInstructors";
 import axios from 'axios';
 import {Redirect} from 'react-router-dom';
+
 
 export const AddNew = () => {
     const [validatedA, setValidatedA] = useState(false);
     const [instr, setInstr] = useState([]);
     const [error,setError]=useState(true);
+    const [theid,setId]=useState("");
+    const [courses,setCourses]=useState([]);
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -18,6 +22,16 @@ export const AddNew = () => {
           setInstr(result.data);
         };
         fetchData();
+        const fetchIds = async () => {
+            const res = await axios(
+              'http://localhost:3000/courses',
+            );
+        
+            setCourses(res.data);
+            doId(res.data);
+          };
+          fetchIds();
+          
     }, []);
 
     const [data,setData]=useState({
@@ -48,10 +62,11 @@ export const AddNew = () => {
           event.preventDefault();
           event.stopPropagation();
           console.log("wrong");
+          console.log(data);
         }
         else{
             event.preventDefault();
-            console.log("mpike");
+            console.log(data);
             const postData = async () => {
                 let cb=await axios.post(
                   'http://localhost:3000/courses/',data
@@ -63,10 +78,12 @@ export const AddNew = () => {
                   
               };
               postData();
-            }
-    
+              
+        }
+       
         setValidatedA(true);
-      };
+        
+    };
     const updateData=(event)=>{
         setData({...data, [event.target.name]:event.target.value});
     };
@@ -83,6 +100,20 @@ export const AddNew = () => {
             temp.push(event.target.name);
             setData({...data, instructors:temp});
         }
+    };
+    const doId=(courses)=>{
+        let ids=[];
+        courses.map((course)=>{
+            ids.push(course.id);
+        });
+        let higher= ids[0];
+        ids.map((id)=>{
+            if(id>higher){
+                higher=id;
+            }
+        });
+        higher++;
+        setData({...data, id:"0"+higher.toString()});
     };
 
     if(!error){

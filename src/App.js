@@ -22,11 +22,12 @@ const Main = () => (
 const Header = () => (
   <div>
   <nav className="navbar navbar-expand-lg navbar-light  bg-dark">
-    <ul className="navbar-nav">
+    <ul className="navbar-nav" style={{display:"flex"}}>
       <li className="nav-item">
         <Link className="navbar-brand" style={{color: "white"}} to="/">Code.Hub DashBoard</Link>
       </li>
-      <li className="nav-item" style={{"marginLeft":"60vw"}} >
+      <li><div style={{width: "60vw"}}></div></li>
+      <li className="nav-item" >
         <Link className="navbar-brand" style={{color:"LightGray"}} to="/Courses">Courses</Link>
       </li>
       <li className="nav-item">

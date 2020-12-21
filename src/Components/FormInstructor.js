@@ -6,7 +6,6 @@ import axios from 'axios';
 const FormInstructor = (props) => {
     const [allInstr, setAll]=useState([]);
     const [allC, setC]=useState({});
-    const [teach,setTeach]=useState([]);
     const [loaded,setLoad]=useState(false);
 
     useEffect(() => {
@@ -27,14 +26,14 @@ const FormInstructor = (props) => {
         };  
         fetchB(); 
         setLoad(true);
-    },[]);
+    },[props.id]);
     console.log(allC,"course");
     console.log(allInstr,"teacher");
 
     return(
       <>
           {allInstr?.map((item)=>(
-              <Form.Check  type="checkbox" name={item.id} checked={true} label={item.name && item.name.first+" "+item.name.last} name="bookable"/>
+              <Form.Check  type="checkbox" name={item.id} checked={true} label={item.name && item.name.first+" "+item.name.last} />
           ))}
       </>
     );

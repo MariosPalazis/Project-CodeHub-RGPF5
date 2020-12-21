@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useState} from "react";
 import {Button,Modal,Form} from "react-bootstrap";
 import FormInstructor from "../Components/FormInstructor";
 import {Redirect} from 'react-router-dom';
